@@ -1,0 +1,56 @@
+<div class="row">
+    <div class="col-md-8 col-md-offset-2">
+        <h1 class="page-header">List {{type.charAt(0).toUpperCase() + type.substr(1).toLowerCase()}}s</h1>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->
+<div class="row">
+  <div class="col-md-8 col-md-offset-2">
+    <div class="btn-toolbar" role="toolbar">
+      <a type="button" href="#/point/{{type}}/new" class="btn btn-primary">New</a>
+      <button type="button" class="btn btn-default" ng-click="refresh()"><i class="fa fa-refresh"></i></button>
+    </div>
+  </div>
+  <!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->
+<div>&nbsp;</div>
+<div class="row">
+    <div class="col-md-8 col-md-offset-2">
+      <table class="table table-striped table-bordered table-hover" at-table at-paginated at-list="points" at-config="config" ng-if="points.length > 0">
+        <thead></thead>
+        <tbody>
+          <tr>
+            <td ng-class="{ 'hidden-point': item.hide }" at-title="Time" width="15%" style="vertical-align:middle">{{formatTimestamp(item.timestamp)}}</td>
+            <td ng-class="{ 'hidden-point': item.hide }" at-implicit at-attribute="title" at-title="Title" width="35%" style="vertical-align:middle"></td>
+            <td ng-class="{ 'hidden-point': item.hide }" at-implicit at-attribute="latitude" at-title="Latitude" width="20%" style="vertical-align:middle"></td>
+            <td ng-class="{ 'hidden-point': item.hide }" at-implicit at-attribute="longitude" at-title="Longitude" width="20%" style="vertical-align:middle"></td>
+            <td at-title="Edit" width="5%" style="vertical-align:middle"><a href="#/point/{{item.type}}/{{item.id}}/edit" type="button" class="btn btn-default"><i class="fa fa-pencil"></i></a></td>
+            <td at-title="Delete" width="5%" style="vertical-align:middle"><button type="button" class="btn btn-default" ng-click="openDeleteModal(item.type, item.id)"><i class="fa fa-trash-o"></i></button></td>
+          </tr>
+        </tbody>
+      </table>
+      <at-pagination at-list="points" at-config="config" ng-if="points.length > 0"></at-pagination>
+      <p class="lead" ng-if="points.length <= 0">Nothing to see here! List is empty!</p>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->
+<div class="row" ng-if="type == 'route'">
+  <div class="col-md-8 col-md-offset-2">
+    <hr>
+    <h2>Import Route</h2>
+    <p>Routes can be created using the admin interface and also be be imported from any KML feed, like <a href="http://www.tripline.net/" target="_blank">Tripline</a>. Just enter the KML feed Url in the input below and click on the Import button. </p>
+    <form role="form" ng-submit="importRoute(importUrl)">
+      <div class="form-group">
+        <label for="url">Import Url (KML)</label>
+        <input type="text" class="form-control" id="url" ng-model="importUrl" placeholder="Enter KML Feed Url">
+      </div>
+      <button type="submit" class="btn btn-default"><i ng-if="importing" class="fa fa-spinner fa-spin"></i> Import</button>
+    </form>
+  </div>
+  <!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->
+<div>&nbsp;</div>
