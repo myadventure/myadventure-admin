@@ -11,7 +11,7 @@
   * @desc
   */
   function PointResource($resource) {
-    return $resource('/api/v1/point/:type/:id', { type: '@type', id: '@id' }, {
+    return $resource('http://api.myadventure.io/api/v1/point/:type/:id', { type: '@type', id: '@id' }, {
       update: {
         method: 'PUT'
       }

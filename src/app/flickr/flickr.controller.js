@@ -13,7 +13,7 @@
 
   function FlickrCtrl($scope, $log, $http, $modal) {
 
-    $http.get('/api/v1/config/flickr_photoset_title').
+    $http.get('http://api.myadventure.com/api/v1/config/flickr_photoset_title').
       success(function(data, status, headers, config) {
         $scope.photosetTitle = data.value;
         $log.info("Photoset Title: " + data.value);
@@ -23,7 +23,7 @@
         $log.error("Error fetching Photoset Title.");
       });
 
-    $http.get('/api/v1/config/flickr_username').
+    $http.get('http://api.myadventure.com/api/v1/config/flickr_username').
       success(function(data, status, headers, config) {
         $scope.username = data.value;
         $log.info("Username: " + data.value);
@@ -33,7 +33,7 @@
         $log.error("Error fetching Username.");
       });
 
-    $http.get('/api/v1/config/flickr_api_key').
+    $http.get('http://api.myadventure.com/api/v1/config/flickr_api_key').
       success(function(data, status, headers, config) {
         $scope.apiKey = data.value;
         $log.info("API Key: " + data.value);
@@ -43,7 +43,7 @@
         $log.error("Error fetching API Key.");
       });
 
-    $http.get('/api/v1/config/flickr_api_secret').
+    $http.get('http://api.myadventure.com/api/v1/config/flickr_api_secret').
       success(function(data, status, headers, config) {
         $scope.apiSecret = data.value;
         $log.info("API Secret: " + data.value);
@@ -55,16 +55,16 @@
 
     $scope.updateFlickr = function(username, photoset, apiKey, apiSecret) {
       $log.info("Updating Flickr information.");
-      $http.post('/api/v1/config', { name: 'flickr_username', value: username }).
+      $http.post('http://api.myadventure.com/api/v1/config', { name: 'flickr_username', value: username }).
         success(function(data, status, headers, config) {
           $log.info("Username updated successfully.");
-          $http.post('/api/v1/config', { name: 'flickr_photoset_title', value: photoset }).
+          $http.post('http://api.myadventure.com/api/v1/config', { name: 'flickr_photoset_title', value: photoset }).
             success(function(data, status, headers, config) {
               $log.info("Photoset Title updated successfully.");
-              $http.post('/api/v1/config', { name: 'flickr_api_key', value: apiKey }).
+              $http.post('http://api.myadventure.com/api/v1/config', { name: 'flickr_api_key', value: apiKey }).
                 success(function(data, status, headers, config) {
                   $log.info("API Key updated successfully.");
-                  $http.post('/api/v1/config', { name: 'flickr_api_secret', value: apiSecret }).
+                  $http.post('http://api.myadventure.com/api/v1/config', { name: 'flickr_api_secret', value: apiSecret }).
                     success(function(data, status, headers, config) {
                       $log.info("API Secret updated successfully.");
                       $scope.openInfoModal("Success", "Flickr information updated successfully.");
@@ -94,7 +94,7 @@
 
       var modalInstance = $modal.open({
         animation: true,
-        templateUrl: '/admin/app/modal/modal-info.html',
+        templateUrl: 'app/modal/modal-info.html',
         controller: 'InfoModalController',
         resolve: {
           title: function () {

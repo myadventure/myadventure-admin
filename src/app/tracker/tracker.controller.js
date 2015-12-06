@@ -18,7 +18,7 @@
       $scope.points = Point.query({ type: 'tracker' });
     }
 
-    $http.get('/api/v1/config/tracker_type').
+    $http.get('http://api.myadventure.com/api/v1/config/tracker_type').
       success(function(data, status, headers, config) {
         $scope.trackerType = data.value;
         $log.info("Tracker Type: " + data.value);
@@ -28,7 +28,7 @@
         $log.error("Error fetching Tracker Type.");
       });
 
-    $http.get('/api/v1/config/tracker_url').
+    $http.get('http://api.myadventure.com/api/v1/config/tracker_url').
       success(function(data, status, headers, config) {
         $scope.trackerUrl = data.value;
         $log.info("Tracker Url: " + data.value);
@@ -69,10 +69,10 @@
     $scope.updateTracker = function(url, type) {
       $log.info("Updating tracker information.");
       $log.info("Type: " + type + ", Url: " + url);
-      $http.post('/api/v1/config', { name: 'tracker_type', value: type }).
+      $http.post('http://api.myadventure.io/api/v1/config', { name: 'tracker_type', value: type }).
         success(function(data, status, headers, config) {
           $log.info("Tracker Type updated successfully.");
-          $http.post('/api/v1/config', { name: 'tracker_url', value: url }).
+          $http.post('http://api.myadventure.io/api/v1/config', { name: 'tracker_url', value: url }).
             success(function(data, status, headers, config) {
               $log.info("Tracker Url updated successfully.");
               $scope.openInfoModal("Success", "Tracker information updated successfully.");
@@ -92,7 +92,7 @@
 
       var modalInstance = $modal.open({
         animation: true,
-        templateUrl: '/admin/app/modal/modal-delete.html',
+        templateUrl: 'app/modal/modal-delete.html',
         controller: 'DeleteModalController',
         resolve: {
           point: function () {
@@ -113,7 +113,7 @@
 
       var modalInstance = $modal.open({
         animation: true,
-        templateUrl: '/admin/app/modal/modal-info.html',
+        templateUrl: 'app/modal/modal-info.html',
         controller: 'InfoModalController',
         resolve: {
           title: function () {

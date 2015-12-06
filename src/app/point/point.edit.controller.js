@@ -7,14 +7,11 @@
     'use strict';
 
   /**
-  * @name NewPointCtrl
+  * @name EditPointCtrl
   * @desc
   */
 
-  function NewPointCtrl($scope, $log, $location, $routeParams, $modal, uiGmapGoogleMapApi, Point) {
-    $scope.point = new Point();
-    $scope.point.type = $routeParams.type;
-    $scope.point.timestamp = moment();
+  function EditPointCtrl($scope, $log, $location, $routeParams, $modal, uiGmapGoogleMapApi, uiGmapIsReady, Point) {
 
     function fixResourceUrl(url, isVideo) {
       if (url) {
@@ -44,9 +41,9 @@
       return url;
     }
 
-    $scope.savePoint = function() {
+    $scope.updatePoint = function() {
       $scope.point.resource = fixResourceUrl($scope.point.resource, $scope.point.type === 'video');
-      $scope.point.$save(function() {
+      $scope.point.$update(function() {
         $location.path( "/point/" + $scope.point.type );
       }, function(error) {
         $log.error(error);
@@ -58,7 +55,7 @@
 
       var modalInstance = $modal.open({
         animation: true,
-        templateUrl: '/admin/app/modal/modal-info.html',
+        templateUrl: 'app/modal/modal-info.html',
         controller: 'InfoModalController',
         resolve: {
           title: function () {
@@ -88,6 +85,22 @@
       $scope.$apply();
     }
 
+    function loadPoint() {
+      $scope.point = Point.get({ type: $routeParams.type, id: $routeParams.id }, function(point) {
+        marker = new google.maps.Marker({
+          id: 1,
+          position: new google.maps.LatLng(point.latitude, point.longitude),
+          map: $scope.map.control.getGMap()
+        });
+
+        if (point.timestamp) {
+          point.timestamp = moment(point.timestamp);
+        } else {
+          point.timestamp = moment();
+        }
+      });
+    };
+
     var mapOptions = {
       disableDefaultUI: true,
       draggableCursor:'crosshair',
@@ -102,20 +115,25 @@
     }
 
     uiGmapGoogleMapApi.then( function(maps) {
-      $scope.map = { center: { latitude: 43.2358808, longitude: 51.7155101 }, zoom: 4, options: mapOptions, events: mapEvents };
+      $scope.map = { center: { latitude: 43.2358808, longitude: 51.7155101 }, zoom: 4, options: mapOptions, events: mapEvents, control: {} };
+    });
+
+    uiGmapIsReady.promise().then(function (maps) {
+      loadPoint();
     });
   }
 
-  NewPointCtrl.$inject = [
+  EditPointCtrl.$inject = [
     '$scope',
     '$log',
     '$location',
     '$routeParams',
     '$modal',
     'uiGmapGoogleMapApi',
+    'uiGmapIsReady',
     'Point'
   ];
 
-  angular.module('app.point').controller('NewPointController', NewPointCtrl);
+  angular.module('app.point').controller('EditPointController', EditPointCtrl);
 
 })();
